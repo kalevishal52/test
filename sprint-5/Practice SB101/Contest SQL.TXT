@@ -1,0 +1,1 @@
+select ceil(Avg(salary)-Avg(REPLACE(salary,"0",""))) from employees;

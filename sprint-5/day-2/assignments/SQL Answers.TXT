@@ -1,0 +1,301 @@
+Question 1)
+
+> create table Person 
+(
+id int Primary Key,
+email varchar(12)
+)
+;
+
+> insert into person values
+(1,'a@b.com'),
+(2,'c@d.com'),
+(3,'a@b.com')
+;
+
+Q) Write an SQL query to report all the duplicate emails.
+
+> select email,count(email) from person group by email having count(email) > 1;
++---------+--------------+
+| email   | count(email) |
++---------+--------------+
+| a@b.com |            2 |
++---------+--------------+
+
+==========================================================
+Q2) 
+
+> CREATE DATABASE ORG;
+> SHOW DATABASES;
+> USE ORG;
+
+> CREATE TABLE Worker (
+WORKER_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+FIRST_NAME CHAR(25),
+LAST_NAME CHAR(25),
+SALARY INT(15),
+JOINING_DATE DATETIME,
+DEPARTMENT CHAR(25)
+);
+
+
+> INSERT INTO Worker
+(WORKER_ID, FIRST_NAME, LAST_NAME, SALARY, JOINING_DATE, DEPARTMENT) VALUES
+(001, 'Monika', 'Arora', 100000, '14-02-20 09.00.00', 'HR'),
+(002, 'Niharika', 'Verma', 80000, '14-06-11 09.00.00', 'Admin'),
+(003, 'Vishal', 'Singhal', 300000, '14-02-20 09.00.00', 'HR'),
+(004, 'Amitabh', 'Singh', 500000, '14-02-20 09.00.00', 'Admin'),
+(005, 'Vivek', 'Bhati', 500000, '14-06-11 09.00.00', 'Admin'),
+(006, 'Vipul', 'Diwan', 200000, '14-06-11 09.00.00', 'Account'),
+(007, 'Satish', 'Kumar', 75000, '14-01-20 09.00.00', 'Account'),
+(008, 'Geetika', 'Chauhan', 90000, '14-04-11 09.00.00', 'Admin');
+
+> CREATE TABLE Bonus (
+WORKER_REF_ID INT,
+BONUS_AMOUNT INT(10),
+BONUS_DATE DATETIME,
+FOREIGN KEY (WORKER_REF_ID)
+REFERENCES Worker(WORKER_ID)
+ON DELETE CASCADE
+);
+
+> INSERT INTO Bonus
+(WORKER_REF_ID, BONUS_AMOUNT, BONUS_DATE) VALUES
+(001, 5000, '16-02-20'),
+(002, 3000, '16-06-11'),
+(003, 4000, '16-02-20'),
+(001, 4500, '16-02-20'),
+(002, 3500, '16-06-11');
+
+> CREATE TABLE Title (
+WORKER_REF_ID INT,
+WORKER_TITLE CHAR(25),
+AFFECTED_FROM DATETIME,
+FOREIGN KEY (WORKER_REF_ID)
+REFERENCES Worker(WORKER_ID)
+ON DELETE CASCADE
+);
+
+> INSERT INTO Title
+(WORKER_REF_ID, WORKER_TITLE, AFFECTED_FROM) VALUES
+(001, 'Manager', '2016-02-20 00:00:00'),
+(002, 'Executive', '2016-06-11 00:00:00'),
+(008, 'Executive', '2016-06-11 00:00:00'),
+(005, 'Manager', '2016-06-11 00:00:00'),
+(004, 'Asst. Manager', '2016-06-11 00:00:00'),
+(007, 'Executive', '2016-06-11 00:00:00'),
+(006, 'Lead', '2016-06-11 00:00:00'),
+(003, 'Lead', '2016-06-11 00:00:00');
+
+
+> select * from worker; select * from bonus; select * from title;
+				WORKER
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | Monika     | Arora     | 100000 | 2014-02-20 09:00:00 | HR         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+
+			BONUS
++---------------+--------------+---------------------+
+| WORKER_REF_ID | BONUS_AMOUNT | BONUS_DATE          |
++---------------+--------------+---------------------+
+|             1 |         5000 | 2016-02-20 00:00:00 |
+|             2 |         3000 | 2016-06-11 00:00:00 |
+|             3 |         4000 | 2016-02-20 00:00:00 |
+|             1 |         4500 | 2016-02-20 00:00:00 |
+|             2 |         3500 | 2016-06-11 00:00:00 |
++---------------+--------------+---------------------+
+
+			Title
++---------------+---------------+---------------------+
+| WORKER_REF_ID | WORKER_TITLE  | AFFECTED_FROM       |
++---------------+---------------+---------------------+
+|             1 | Manager       | 2016-02-20 00:00:00 |
+|             2 | Executive     | 2016-06-11 00:00:00 |
+|             8 | Executive     | 2016-06-11 00:00:00 |
+|             5 | Manager       | 2016-06-11 00:00:00 |
+|             4 | Asst. Manager | 2016-06-11 00:00:00 |
+|             7 | Executive     | 2016-06-11 00:00:00 |
+|             6 | Lead          | 2016-06-11 00:00:00 |
+|             3 | Lead          | 2016-06-11 00:00:00 |
++---------------+---------------+---------------------+
+
+1. Write an SQL query to show the second highest salary from a Worker table.
+
+>  select * from worker group by salary order by salary desc limit 1,1; 		///////How it is working???
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
++-----------+------------+-----------+--------+---------------------+------------+
+
+> > select salary from worker where salary < (select Max(Salary) from worker); 		////// Giving all salary below largest ???
+
+2. Write an SQL query to determine the 5 highest salary from a Worker table.
+
+> select *from worker group by salary order by salary desc limit 4,1;
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+											
+
+3. Write an SQL query to show only even rows from a Worker table.
+
+> select * from worker where worker_id%2 = 0;
++-----------+------------+-----------+--------+---------------------+------------+
+| WORKER_ID | FIRST_NAME | LAST_NAME | SALARY | JOINING_DATE        | DEPARTMENT |
++-----------+------------+-----------+--------+---------------------+------------+
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+
+4. Write an SQL query to fetch the no. of workers for each department in the descending order from the Worker table.
+
+> SELECT department, count(department) from worker group by department order by count(department) desc;
++------------+-------------------+
+| department | count(department) |
++------------+-------------------+
+| Admin      |                 4 |
+| HR         |                 2 |
+| Account    |                 2 |
++------------+-------------------+
+
+5. Write an SQL query to fetch the list of employees with the same salary from the Worker table.
+
+> SELECT first_name
+FROM worker 
+WHERE Salary IN (
+    SELECT Salary
+    FROM worker
+    GROUP BY Salary
+    HAVING COUNT(*) > 1
+);
+
+===============================================================
+Q3)
+
+> create table EmployeeDetails
+(
+EmpId int,
+FullName varchar(30),
+ManagerId int,
+DateofJoining Date,
+City varchar(20)
+)
+;
+
+> insert into EmployeeDetails values 
+( 121, 'John Snow', 321, '2014-01-31', 'Toronto'),
+( 321, 'Walter White', 986, '2015-01-30', 'California'),
+( 421, 'Kuldeep Rana', 876, '2016-11-27', 'New Delhi')
+;
+
+> insert into EmployeeDetails values 
+( 122, 'Ajinkya Jagtap', 321, '2022-01-31', 'Pune'),
+( 123, 'Onkar Kadam', 321, '2020-01-30', 'Banglore')
+;
+
+> create table EmployeeSalary 
+(
+EmpId int,
+Project varchar(3),
+Salary int,
+Variable int
+)
+;
+
+> insert into EmployeeSalary values 
+( 121, 'P1', 8000, 500),
+( 321, 'P2', 10000, 1000),
+( 421, 'P1', 12000, 0)
+;
+			EmployeeDetails 
++-------+----------------+-----------+---------------+------------+
+| EmpId | FullName       | ManagerId | DateofJoining | City       |
++-------+----------------+-----------+---------------+------------+
+|   121 | John Snow      |       321 | 2014-01-31    | Toronto    |
+|   321 | Walter White   |       986 | 2015-01-30    | California |
+|   421 | Kuldeep Rana   |       876 | 2016-11-27    | New Delhi  |
+|   122 | Ajinkya Jagtap |       321 | 2022-01-31    | Pune       |
+|   123 | Onkar Kadam    |       321 | 2020-01-30    | Banglore   |
++-------+----------------+-----------+---------------+------------+
+
+		EmployeeSalary 
++-------+---------+--------+----------+
+| EmpId | Project | Salary | Variable |
++-------+---------+--------+----------+
+|   121 | P1      |   8000 |      500 |
+|   321 | P2      |  10000 |     1000 |
+|   421 | P1      |  12000 |        0 |
++-------+---------+--------+----------+
+
+1. Write an SQL query to fetch the employees whose name begins with any two characters, followed by a text “hn” and ending with any
+sequence of characters.
+
+> select Fullname from employeedetails where fullname LIKE '__hn%';
++-----------+
+| Fullname  |
++-----------+
+| John Snow |
++-----------+
+
+2. Write an SQL query to fetch common records between two tables.
+
+> select e.empId, e.fullName from employeeDetails e INNER JOIN employeeSalary s where e.empId = s.empId;
++-------+--------------+
+| empId | fullName     |
++-------+--------------+
+|   121 | John Snow    |
+|   321 | Walter White |
+|   421 | Kuldeep Rana |
++-------+--------------+
+
+3. Write an SQL query to fetch records that are present in one table but not in another table.
+
+> select * from employeeDetails e LEFT JOIN employeeSalary s ON e.empId = s.empId;
++-------+----------------+-----------+---------------+------------+-------+---------+--------+----------+
+| EmpId | FullName       | ManagerId | DateofJoining | City       | EmpId | Project | Salary | Variable |
++-------+----------------+-----------+---------------+------------+-------+---------+--------+----------+
+|   121 | John Snow      |       321 | 2014-01-31    | Toronto    |   121 | P1      |   8000 |      500 |
+|   321 | Walter White   |       986 | 2015-01-30    | California |   321 | P2      |  10000 |     1000 |
+|   421 | Kuldeep Rana   |       876 | 2016-11-27    | New Delhi  |   421 | P1      |  12000 |        0 |
+|   122 | Ajinkya Jagtap |       321 | 2022-01-31    | Pune       |  NULL | NULL    |   NULL |     NULL |
+|   123 | Onkar Kadam    |       321 | 2020-01-30    | Banglore   |  NULL | NULL    |   NULL |     NULL |
++-------+----------------+-----------+---------------+------------+-------+---------+--------+----------+
+
+4. Write an SQL query to find the maximum, minimum, and average salary of the employees.
+
+> select Max(salary), Min(salary) , Avg(salary) from EmployeeSalary;
++-------------+-------------+-------------+
+| Max(salary) | Min(salary) | Avg(salary) |
++-------------+-------------+-------------+
+|       12000 |        8000 |  10000.0000 |
++-------------+-------------+-------------+
+
+
+5. Fetch all the employees who are not working on any project.
+
+> select * from employees where EmpId NOT IN (select e.empId from employeedetails e INNER JOIN employeesalary s where e.empid = s.empid );
++-------+----------------+-----------+---------------+----------+
+| EmpId | FullName       | ManagerId | DateofJoining | City     |
++-------+----------------+-----------+---------------+----------+
+|   122 | Ajinkya Jagtap |       321 | 2022-01-31    | Pune     |
+|   123 | Onkar Kadam    |       321 | 2020-01-30    | Banglore |
++-------+----------------+-----------+---------------+----------+
+
+
+
+
+
+
