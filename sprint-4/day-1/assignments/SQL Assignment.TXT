@@ -1,0 +1,136 @@
+
+
+3) Create a table Bank with following field;
+Name Account Number Balance
+Ram ac-12123 50000
+John ac-w4123 60000
+David ac-23134 10000
+
+Transfer INR 10000 from Jhon’s account to David’s bank account
+Using Transactions in MySQL.
+
+> create table Bank 
+(
+name varchar(12),
+account_number varchar(8) Primary key,
+balance int
+)
+;
+
+> insert into Bank values 
+('Ram', 'ac-12123', 50000),
+('John', 'ac-w4123', 60000),
+('David', 'ac-23134', 10000)
+;
+
+	1st method properly
+mysql> select * from bank;
++-------+----------------+---------+
+| name  | account_number | balance |
++-------+----------------+---------+
+| Ram   | ac-12123       |   50000 |
+| David | ac-23134       |   10000 |
+| John  | ac-w4123       |   60000 |
++-------+----------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> set autocommit = 0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> start Transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> savepoint p1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> UPDATE Bank Set balance = balance - 10000 where account_number = 'ac-w4123';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE Bank set balance = balance + 10000 where account_number = 'ac-23134';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> commit;
+Query OK, 0 rows affected (0.12 sec)
+
+
+mysql> select * from bank;
++-------+----------------+---------+
+| name  | account_number | balance |
++-------+----------------+---------+
+| Ram   | ac-12123       |   50000 |
+| David | ac-23134       |   20000 |
+| John  | ac-w4123       |   50000 |
++-------+----------------+---------+
+3 rows in set (0.02 sec)
+
+
+
+
+
+	2 method not properly
+
+mysql> select * from bank;
++-------+----------------+---------+
+| name  | account_number | balance |
++-------+----------------+---------+
+| Ram   | ac-12123       |   50000 |
+| David | ac-23134       |   10000 |
+| John  | ac-w4123       |   60000 |
++-------+----------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> set autocommit = 0 ;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> savepoint p1;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> UPDATE Bank Set balance = balance - 10000 where account_number = 'ac-w4123';
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from bank;
++-------+----------------+---------+
+| name  | account_number | balance |
++-------+----------------+---------+
+| Ram   | ac-12123       |   50000 |
+| David | ac-23134       |   10000 |
+| John  | ac-w4123       |   50000 |
++-------+----------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> UPDATE Bank set balance = balance + 10000 where account_number = 'ac-23134';
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from bank;
++-------+----------------+---------+
+| name  | account_number | balance |
++-------+----------------+---------+
+| Ram   | ac-12123       |   50000 |
+| David | ac-23134       |   20000 |
+| John  | ac-w4123       |   50000 |
++-------+----------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> rollback to p1;
+Query OK, 0 rows affected (0.24 sec)
+
+mysql> select * from bank;
++-------+----------------+---------+
+| name  | account_number | balance |
++-------+----------------+---------+
+| Ram   | ac-12123       |   50000 |
+| David | ac-23134       |   10000 |
+| John  | ac-w4123       |   60000 |
++-------+----------------+---------+
+3 rows in set (0.00 sec)
+
+
+
+

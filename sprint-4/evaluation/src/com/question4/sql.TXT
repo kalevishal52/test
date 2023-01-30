@@ -1,0 +1,25 @@
+
+> create table abcdatabases 
+(
+Rollno int,
+StudentName varchar(20) not null,
+Standard varchar(2) not null,
+Date_of_Birth Date,
+Fees int 
+)
+;
+
+
+> create database bankDB;
+
+> use bankDB;
+
+> create table account 
+(
+id int Primary Key,
+email varchar(20),
+address varchar(20),
+balance double(9,4)
+);
+
+> select oc.custonerName, oc.customerCity, oc.CustomerCity, o.ordertotal from onlincustomers INNER JOIN orders ON oc.customerid NOT IN (select o.customerid from order o INNER JOIN sales s ON o.orderId = s.orderId )

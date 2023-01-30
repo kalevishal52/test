@@ -1,0 +1,3 @@
+
+
+> select oc.custonerName, oc.customerCity, oc.CustomerCity, o.ordertotal from onlincustomers INNER JOIN orders ON oc.customerid NOT IN (select o.customerid from order o INNER JOIN sales s ON o.orderId = s.orderId ) ;

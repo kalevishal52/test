@@ -1,0 +1,36 @@
+Query the two cities in STATION with the shortest and longest CITY names, as well as their respective lengths (i.e.: number of characters in the name). If there is more than one smallest or largest city, choose the one that comes first when ordered alphabetically.
+The STATION table is described as follows:
+
+
+> select CITY,LENGTH(CITY) from Station where LENGTH(CITY) = (select MIN(LENGTH(CITY)) from STATION) order by CITY LIMIT 1;
+
+> select CITY,LENGTH(CITY) from STATION where LENGTH(CITY) = (select MAX(LENGTH(CITY)) from STATION) order by CITY LIMIT 1;
+ -----------------------------------
+
+FINDING CITY WITH STARTING VOVELS
+
+> select DISTINCT CITY from STATION where CITY LIKE 'a%' OR CITY LIKE 'e%' OR CITY LIKE 'i%' OR CITY LIKE 'O%' OR CITY LIKE 'U%';
+
+-----------------
+vovels start and at end
+
+> SELECT DISTINCT CITY
+FROM STATION
+WHERE REGEXP_LIKE(CITY, '^[aeiou].*[aeiou]$')
+
+> SELECT DISTINCT CITY FROM STATION WHERE LOWER(LEFT(CITY,1)) IN ('a','e','i','o','u') AND LOWER(RIGHT(CITY,1)) IN ('a','e','i','o','u');
+
+> select distinct(city) from station where left(lower(city),1) in ('a','e','i','o','u') and right(lower(city),1) in ('a','e','i','o','u');
+
+-----------------
+
+Query the list of CITY names from STATION that do not start with vowels. Your result cannot contain duplicates.
+
+> select DISTINCT city FROM station where LOWER(LEFT(CITY,1)) NOT IN ('a','e','i','o','u');
+
+-----------------
+
+Query the list of CITY names from STATION that do not end with vowels. Your result cannot contain duplicates.
+
+> select DISTINCT city from station where LOWER(RIGHT(CITY,1)) NOT IN ('a','e','i','o','u');
+
